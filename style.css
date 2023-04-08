@@ -1,3 +1,14 @@
+@font-face {
+	font-family: BakbakOne;
+	src: url(BakbakOne-Regular.ttf);
+}
+
+* {
+	box-sizing: border-box;
+	font-size: 14px;
+	font-family: BakbakOne;
+}
+
 body {
     width: 100%;
     height: 100%;
@@ -9,27 +20,297 @@ body {
 }
 
 #mainView {
+	position: relative;
     width: 100%;
     height: 100%;
-    background-color: green;
+    background-color: black;
+}
+
+/* * Teams * */
+
+/*#teamNames > div {
+	position: absolute;
+	top: 0px;
+	width: 20%;
+	background-color: #777;
+	padding: 10px;
+	font-size: 26px;
+	border: 4px double #EEE;
+}
+#teamNames > div::before,
+#teamNames > div::after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 0px;
+	height: 0px;
+	border: 40px solid transparent;
+	border-bottom: 50px solid #555;
+}
+div#team1Name {
+	left: 20%;
+	border-color: red;
+}
+div#team2Name {
+	right: 20%;
+	border-color: blue;
+}*/
+
+.team-container {
+    position: absolute;
+    bottom: 200px;
+	opacity: 0.825;
+	background-color: #AAA;
+	border: 1px solid #AAA;
+	padding-top: 1px;
+}
+.team-name {
+	position: absolute;
+	top: -45px;
+	left: 43px;
+	z-index: 15;
+	width: calc(100% - 42px);
+	background-color: #AAA;
+	font-size: 30px;
+	border: 1px solid #F00;
+}
+.team-name::before {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: -45px;
+	z-index: -1;
+	border: 45px solid transparent;
+	border-bottom: 44px solid #AAA;
+}
+.team-name::after {
+	content: '';
+	position: absolute;
+	bottom: 0px;
+	left: -46px;
+	z-index: -2;
+	border: 44px solid transparent;
+	border-bottom: 44px solid #AAA;
+}
+.team-name-text {
+	color: inherit;
+	font-size: inherit;
+	width: 100%;
+	padding-right: 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.team-container-footer {
+	position: absolute;
+	bottom: -45px;
+	left: -1px;
+	z-index: 15;
+	height: 45px;
+	width: calc(100% - 42px);
+	background-color: #AAA;
+	font-size: 30px;
+	border: 1px solid #AAA;
+	border-top: none;
+	text-align: center;
+}
+.team-container-footer::before {
+	content: '';
+	position: absolute;
+	top: -1px;
+	right: -45px;
+	z-index: -1;
+	border: 45px solid transparent;
+	border-top: 45px solid #AAA;
+}
+.team-container-footer::after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	right: -45px;
+	z-index: -2;
+	border: 44px solid transparent;
+	border-top: 44px solid #AAA;
+}
+.team-timer {
+	display: inline-block;
+	width: 68px;
+	text-align: left;
+	font-size: 24px;
+}
+.team-timer::before {
+	content: '';
+	background-image: url(respawn-icon.svg);
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: top;
+	width: 24px;
+	height: 24px;
+	margin-top: 4px;
+	margin-right: 4px;
+}
+.team-timer::after {
+	content: 's';
 }
 
 #team1 {
-    position: absolute;
-    top: 25%;
     left: 0;
-    background-color:brown;
+	border-color: #F00;
 }
-
+#team1 .team-name {
+	border-color: #F00;
+	color: #F00;
+}
+#team1 .team-name::after {
+	border-bottom-color: #F00;
+}
+#team1 .team-container-footer {
+	border-color: #F00;
+}
+#team1 .team-container-footer::after {
+	border-top-color: #F00;
+}
 #team2 {
-    position: absolute;
-    top: 25%;
     right: 0;
-    background-color: lightblue;
+	border-color: #00F;
+}
+#team2 .team-name {
+	border-color: #00F;
+	color: #00F;
+}
+#team2 .team-name::after {
+	border-bottom-color: #00F;
+}
+#team2 .team-container-footer {
+	border-color: #00F;
+}
+#team2 .team-container-footer::after {
+	border-top-color: #00F;
 }
 
-.player-class {
-    width: 100px;
-    height: 100px;
-    background-size: contain;
+/* Reverse class icons */
+#team1 .player {
+	padding-left: 60px;
 }
+#team1 .player .player-class {
+	left: 0px;
+}
+
+#team2 .player {
+	padding-right: 60px;
+}
+#team2 .player .player-class {
+	right: 0px;
+}
+
+/*_ _ End of teams _ _*/
+
+/* * Players * */
+
+.player {
+	position: relative;
+	width: 340px;
+	padding: 0px 4px;
+	margin-bottom: 1px;
+	font-size: 0;
+	border-radius: 4px;
+    /*background-color: #AAA;*/
+	overflow: hidden;
+}
+/*.player .player-class {
+	display: inline-block;
+	vertical-align: top;
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+}*/
+.player .player-class {
+	position: absolute;
+	top: 0px;
+    width: 60px;
+    height: 100%;
+    background-size: contain;
+	background-position: 0px 13px;
+	background-repeat: no-repeat;
+}
+.player .name {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 60px);
+	padding: 1px 5px;
+	padding-left: 25px;
+	font-size: 20px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.player .stats-container {
+	position: relative;
+	overflow: hidden;
+}
+.player .stats-container::before,
+.player .stats-container::after {
+	content: '';
+	position: absolute;
+	z-index: 10;
+	border: 25px solid transparent;
+	pointer-events: none;
+}
+.player .stats-container::before {
+	top: 0px;
+	left: -25px;
+	border-top: 32px solid #AAA;
+}
+.player .stats-container::after {
+	bottom: 0px;
+	right: -25px;
+	border-bottom: 32px solid #AAA;
+}
+/* Health */
+.player .stats-container .health {
+	position: relative;
+	height: 20px;
+	background-color: #EEE;
+}
+.player .stats-container .health-bar {
+	height: inherit;
+	background-color: #900;
+}
+.player .stats-container .health-value {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 5;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	line-height: 19px;
+}
+/* Armour */
+.player .stats-container .armour-bar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 4;
+	height: inherit;
+	background-color: #555;
+}
+/* Energy */
+.player .stats-container .energy {
+	height: 6px;
+	width: calc(100% - 20px);
+	background-color: #EEE;
+}
+.player .stats-container .energy-bar {
+	height: inherit;
+	background-color: #1867FD;
+}
+.player .stats-container .energy-value {
+	display: none;
+}
+
+/*_ _ End of players _ _*/
+

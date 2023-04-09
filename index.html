@@ -4,42 +4,47 @@
 <head>
     <meta charset="utf-8" />
     <title>Dystopia Competitive Overlay</title>
-	<link rel="stylesheet" href="test/style.css" />
+	<link rel="stylesheet" href="style.css" />
     <script src="overlay.js"></script>
+    <script src="test.js"></script>
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
     <div id="templates">
         <div id="playerTemplate" class="player">
             <div class="player-class"></div>
-            <div class="name">
-            </div>
-            <div class="health-container">
-                <div class="value">
-                </div>
+            <div class="name"></div>
+            <div class="stats-container">
                 <div class="health">
-                </div>
-                <div class="armour">
-                </div>
-            </div>
-            <div class="energy-container">
-                <div class="value"></div>
-                <div class="bar"></div>
+					<div class="health-value"></div>
+					<div class="health-bar"></div>
+					<div class="armour-bar"></div>
+				</div>
+				<div class="energy">
+					<div class="energy-value"></div>
+					<div class="energy-bar"></div>
+				</div>
             </div>
         </div>
     </div>
     <div id="mainView">
-        <div id="teamNames">
-            <div id="team1Name"></div>
-            <div id="team2Name"></div>
-        </div>
-        <div id="team1">
-            <div id="team1Timer"></div>
+        <div id="team1" class="team-container">
+			<div class="team-name">
+				<div id="team1Name" class="team-name-text"></div>
+			</div>
             <div id="team1PlayerContainer"></div>
+			<div class="team-container-footer">
+				<div id="team1Timer" class="team-timer"></div>
+			</div>
         </div>
-        <div id="team2">
-            <div id="team2Timer"></div>
+        <div id="team2" class="team-container">
+			<div class="team-name">
+				<div id="team2Name" class="team-name-text"></div>
+			</div>
             <div id="team2PlayerContainer"></div>
+			<div class="team-container-footer">
+				<div id="team2Timer" class="team-timer"></div>
+			</div>
         </div>
     </div>
 </body>

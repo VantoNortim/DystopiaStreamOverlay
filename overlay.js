@@ -54,7 +54,13 @@ function init() {
 function handleMessage(data) {
     var type = data[0];
     var parts = data.slice(1).split(':');
-
+	
+	for(var i = 0; i < parts.length; i++){
+		if(parts[i].match(/^\d+$/)){
+			parts[i] = parseInt(parts[i]);
+		}
+	}
+	
     switch (type) {
         case msgType.ClientConnected:
             console.info('Client connected to server' + parts[0]);
@@ -193,8 +199,8 @@ function getPlayerClassFromClassId(id) {
 }
 
 function updatePlayerHealth(id, amount) {
-    var value = getPlayerChildNode(id, 'health-container .value');
-    var hpBar = getPlayerChildNode(id, 'health-container .health');
+    var value = getPlayerChildNode(id, 'stats-container .health-value');
+    var hpBar = getPlayerChildNode(id, 'stats-container .health-bar');
     var player = getPlayer(id);
 
     value.innerText = amount;
@@ -202,15 +208,17 @@ function updatePlayerHealth(id, amount) {
 }
 
 function updatePlayerArmor(id, amount) {
-    var armourBar = getPlayerChildNode(id, 'health-container .armour');
+    //var value = getPlayerChildNode(id, 'stats-container .armour-value');
+    var armourBar = getPlayerChildNode(id, 'stats-container .armour-bar');
     var player = getPlayer(id);
-
+	
+	//value.innerText = amount;
     armourBar.style.width = percentageOf(amount, ClassData[player.Class].MaxArmour) + '%';
 }
 
 function updatePlayerEnergy(id, amount) {
-    var value = getPlayerChildNode(id, 'energy-container .value');
-    var energyBar = getPlayerChildNode(id, 'energy-container .bar');
+    var value = getPlayerChildNode(id, 'stats-container .energy-value');
+    var energyBar = getPlayerChildNode(id, 'stats-container .energy-bar');
     var player = getPlayer(id);
     
     value.innerText = amount;

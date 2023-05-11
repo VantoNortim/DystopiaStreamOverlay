@@ -6,7 +6,6 @@
     <title>Dystopia Competitive Overlay</title>
 	<link rel="stylesheet" href="style.css" />
     <script src="overlay.js"></script>
-    <script src="test.js"></script>
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
@@ -16,9 +15,9 @@
             <div class="name"></div>
             <div class="stats-container">
                 <div class="health">
+                    <div class="armour-bar"></div>
 					<div class="health-value"></div>
 					<div class="health-bar"></div>
-					<div class="armour-bar"></div>
 				</div>
 				<div class="energy">
 					<div class="energy-value"></div>
@@ -28,15 +27,6 @@
         </div>
     </div>
     <div id="mainView">
-        <div id="team1" class="team-container">
-			<div class="team-name">
-				<div id="team1Name" class="team-name-text"></div>
-			</div>
-            <div id="team1PlayerContainer"></div>
-			<div class="team-container-footer">
-				<div id="team1Timer" class="team-timer"></div>
-			</div>
-        </div>
         <div id="team2" class="team-container">
 			<div class="team-name">
 				<div id="team2Name" class="team-name-text"></div>
@@ -44,6 +34,15 @@
             <div id="team2PlayerContainer"></div>
 			<div class="team-container-footer">
 				<div id="team2Timer" class="team-timer"></div>
+			</div>
+        </div>
+        <div id="team3" class="team-container">
+			<div class="team-name">
+				<div id="team3Name" class="team-name-text"></div>
+			</div>
+            <div id="team3PlayerContainer"></div>
+			<div class="team-container-footer">
+				<div id="team3Timer" class="team-timer"></div>
 			</div>
         </div>
     </div>

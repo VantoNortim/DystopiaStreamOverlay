@@ -1,0 +1,14 @@
+Flag    Description             Data (Comma separated)	
+A       Player connected	    PlayerID    PlayerName
+B	    Player changed team	    PlayerID    TeamID	
+C	    Player disconnected	    PlayerID		
+D	    Player spawned	        PlayerID	Class       MaxEnergy
+E	    Player meat changed	    PlayerID	Health      Armour
+F       Player con /w Team      PlayerID    TeamID      PlayerName
+G	    Player energy changed	PlayerID	Value	
+H	    Player decked in/out	PlayerID	Bool	
+J	    Player died	P           layerID		
+K	    Spawn timer changed	    TeamID	    Value	
+L	    Connected	            Message		
+M	    Team names changed	    Team1Name	Team2Name
+N       Periodic update         Team2SpawnTime:Team3SpawnTime:[PlayerID-Health-Energy-DeckingStatus?]

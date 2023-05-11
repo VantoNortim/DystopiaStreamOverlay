@@ -7,18 +7,19 @@
 function test_createTeam(teamID){
 	console.log("=== Creating test team " + teamID + " ===");
 	
-	test_sendMessage("M", ["Epic Team 1", "Epic Team 2"]); // Connect
+	test_sendMessage("M", ["Nades Without Number", "Epic Team 2"]); // Connect
 	
 	for(var i = 1; i <= 5; i++){
 		var id = (i + ((teamID - 1) * 5));
-		var name = "Player " + id;
+		var name = "Player: " + id;
 		
 		test_sendMessage("A", [id, name]); // Connect
 		test_sendMessage("B", [id, teamID]); // Join team
 		test_sendMessage("D", [id, i % 3, 100]); // Spawn
 		if(i % 2 == 0) test_sendMessage("G", [id, 50]); // Energy
-		if((i + 1) % 2 == 0) test_sendMessage("F", [id, 3]); // Armour
-		if(i % 2 == 0) test_sendMessage("E", [id, 3]); // Health
+		var armour = ((i + 1) % 2 == 0) ? 3 : 5;
+		var health = (i % 2 == 0) ? 3 : 5;
+		test_sendMessage("E", [id, health, armour]); // Armour and Health
 	}
 }
 
@@ -38,9 +39,9 @@ function test_setBackground(){
 document.addEventListener("DOMContentLoaded", function(){
 	test_setBackground();
 	
-	test_createTeam(1);
 	test_createTeam(2);
-	
-	document.getElementById("team1Timer").innerText = "45";
+	test_createTeam(3);
+
 	document.getElementById("team2Timer").innerText = "45";
+	document.getElementById("team3Timer").innerText = "45";
 });

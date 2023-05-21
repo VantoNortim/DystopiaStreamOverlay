@@ -139,9 +139,9 @@ function handleMessage(data) {
             parts.splice(0, 2);
             parts.forEach(element => {
                 var pParts = element.split('-');
-                updatePlayerHealth(pParts[0], pParts[1]);
-                updatePlayerEnergy(pParts[0], pParts[2]);
                 updatePlayerDeckingStatus(pParts[0], pParts[3] != null);
+                updatePlayerHealth(pParts[0], pParts[1]);
+                updatePlayerEnergy(pParts[0], pParts[2]);                
             });
             break;
     }
@@ -242,6 +242,8 @@ function playerSpawn(id, playerClass, usingScs = false) {
     updatePlayerHealth(id, classData.MaxHP);
     updatePlayerArmor(id, classData.MaxArmour);
     //Do not update energy as it might be 0 from TK
+
+    getPlayerChildNode(id, "player-class").classList.remove("dead");
 }
 
 function getPlayerClassFromClassId(id) {
@@ -264,10 +266,11 @@ function updatePlayerHealth(id, amount) {
         return;
     }
 
-    var value = getPlayerChildNode(id, 'stats-container .health-value');
-    var hpBar = getPlayerChildNode(id, 'stats-container .health-bar');
+    if(!player.Decking) {
+        updatePlayerHealthText(id, amount);
+    }
 
-    value.innerText = amount;
+    var hpBar = getPlayerChildNode(id, 'stats-container .health-bar');
     hpBar.style.width = amount == 0 ? 0 : percentageOf(amount, ClassData[player.Class].MaxHP) + '%';
 }
 
@@ -290,11 +293,21 @@ function updatePlayerEnergy(id, amount) {
         return;
     }
 
-    var value = getPlayerChildNode(id, 'stats-container .energy-value');
+    if(amount > 50) {
+        player.MaxEnergy = 75;
+    }
+
+    if(player.Decking) {
+        updatePlayerHealthText(id, amount);
+    }
+
     var energyBar = getPlayerChildNode(id, 'stats-container .energy-bar');
-    
-    value.innerText = amount;
     energyBar.style.width = percentageOf(amount, player.MaxEnergy) + '%';
+}
+
+function updatePlayerHealthText(id, amount) {
+    var value = getPlayerChildNode(id, 'stats-container .health-value');
+    value.innerText = amount;
 }
 
 function updatePlayerDeckingStatus(id, deckedIn) {
@@ -308,8 +321,34 @@ function updatePlayerDeckingStatus(id, deckedIn) {
 
     if(deckedIn) {
         setPicture(id, "cyber", player.Team);
+        swapHealthEnergyBars(id, false);
     } else {
         setClassPicture(id);
+        swapHealthEnergyBars(id, true);
+    }
+}
+
+function swapHealthEnergyBars(id, health) {
+    var eCont = getPlayerChildNode(id, 'stats-container .energy');
+    var hCont = getPlayerChildNode(id, 'stats-container .health');
+    if(health) {
+        
+        eCont.style.top = "auto";
+        eCont.style.bottom = "0px";
+        eCont.style.height = "20%";
+
+        
+        hCont.style.bottom = "auto";
+        hCont.style.top = "0px";
+        hCont.style.height = "80%";
+    } else {
+        eCont.style.bottom = "auto";
+        eCont.style.top = "0px";
+        eCont.style.height = "80%";
+
+        hCont.style.top = "auto";
+        hCont.style.bottom = "0px";
+        hCont.style.height = "20%";
     }
 }
 
@@ -321,6 +360,7 @@ function killPlayer(id) {
 
     updatePlayerHealth(id, 0);
     updatePlayerArmor(id, 0);
+    getPlayerChildNode(id, "player-class").classList.add("dead");
 }
 
 function updateSpawnTimer(teamId, time) {

@@ -4,7 +4,7 @@
 #include <sdkhooks>
 #include <websocket>
 
-#define PLUGIN_VERSION "0.0.1"
+#define PLUGIN_VERSION "1.0.1"
 
 #define MAX_CLIENTS 32
 
@@ -12,7 +12,7 @@ new WebsocketHandle:g_hListenSocket = INVALID_WEBSOCKET_HANDLE;
 new Handle:g_hChildren;
 new Handle:g_hChildIP;
 
-#define DYS_OVERLAY_DEBUG true
+#define DYS_OVERLAY_DEBUG false
 
 #define TEAM_PUNKS 2
 #define TEAM_CORPS 3
@@ -22,6 +22,8 @@ static int g_iTeams[4] = { -1, -1, -1, -1 };
 static char teamNames[100] = "\"Punks\" \"Corps\"";
 
 static char configFileName[] = "dys_overlay.cfg";
+
+static KeyValues config;
 
 public Plugin:myinfo =
 {
@@ -54,7 +56,11 @@ public OnPluginStart()
 		}
 	}
 
-	CreateTimer(1.0, Event_TimerTick, _, TIMER_REPEAT);
+	config = GetConfigKvp();
+
+	float updateRate = config.GetFloat("updaterate", 1.0);
+
+	CreateTimer(updateRate, Event_TimerTick, _, TIMER_REPEAT);
 }
 
 KeyValues GetConfigKvp()
@@ -81,8 +87,7 @@ KeyValues GetConfigKvp()
 
 public OnAllPluginsLoaded()
 {
-	KeyValues configkvp = GetConfigKvp();
-	int port = configkvp.GetNum("port");
+	int port = config.GetNum("port");
 
 	decl String:sServerIP[40];
 	new longip = GetConVarInt(FindConVar("hostip")), pieces[4];
@@ -213,13 +218,7 @@ public Event_OnPlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast
 	if (GetClientTeam(client) < 2)
 		return;
 
-	int class = GetEntProp(client, Prop_Send, "m_iClass");
-	int implants = GetEntProp(client, Prop_Send, "m_iImplants");
-
-	decl String:sBuffer[84];
-	Format(sBuffer, sizeof(sBuffer), "D%d:%d:%b", userid, class, implants);
-
-	SendToAllChildren(sBuffer);
+	CreateTimer(0.1, SendDelayedSpawnMessage, userid);
 }
 
 public Event_OnPlayerClass(Handle:event, const String:name[], bool:dontBroadcast)
@@ -234,13 +233,24 @@ public Event_OnPlayerClass(Handle:event, const String:name[], bool:dontBroadcast
 	if (GetClientTeam(client) < 2)
 		return;
 
-	int class = GetEventInt(event, "class");
+	CreateTimer(0.1, SendDelayedSpawnMessage, userid);
+}
+
+public Action SendDelayedSpawnMessage(Handle timer, int userid) {
+	int client = GetClientOfUserId(userid);
+
+	if(client == 0)  {
+		return Plugin_Continue;
+	}		
+
+	int class = GetEntProp(client, Prop_Send, "m_iClass");
 	int implants = GetEntProp(client, Prop_Send, "m_iImplants");
 
 	decl String:sBuffer[84];
 	Format(sBuffer, sizeof(sBuffer), "D%d:%d:%b", userid, class, implants);
 
 	SendToAllChildren(sBuffer);
+	return Plugin_Continue;
 }
 
 public Event_OnPlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
@@ -292,7 +302,7 @@ public Action Event_TimerTick(Handle timer) {
 				Format(tBuffer, sizeof(tBuffer), ":%d-%d-%d-%d", userId, health, RoundFloat(energy), isInCyber);
 			} else {
 				Format(tBuffer, sizeof(tBuffer), ":%d-%d-%d", userId, health, RoundFloat(energy));
-			}			
+			}
 
 			StrCat(sBuffer, 512, tBuffer);
 		}

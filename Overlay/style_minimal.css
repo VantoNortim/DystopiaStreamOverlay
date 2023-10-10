@@ -152,6 +152,17 @@ body {
 	background-size: 80%;
 	background-color: #2f2f2f8a;
 }
+.player .player-class.cyber-frag::after {
+	content: '';
+	background-image: url("resources/images/icon_cyber.png");
+	width: inherit;
+	height: inherit;
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: #3778F257;
+	background-size: 120%;
+}
 /*_ _ End of teams _ _*/
 
 /* * Players * */

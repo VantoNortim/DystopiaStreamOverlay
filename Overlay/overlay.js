@@ -11,7 +11,8 @@ const msgType =  {
     SpawnTimerChanged: "K",
     ClientConnected: "L",
     TeamNameChanged: "M",
-    PeriodicUpdate: "N"
+    PeriodicUpdate: "N",
+    CyberFrag: "O"
 }
 
 const Teams = {
@@ -33,6 +34,8 @@ const ClassData = {
     Medium: { MaxHP: 100, MaxArmour: 100 },
     Heavy: { MaxHP: 140, MaxArmour: 200 }
 }
+
+const CyberFragDisplayDuration = 5 * 1000; //Ms
 
 var players = {};
 
@@ -139,12 +142,36 @@ function handleMessage(data) {
             parts.splice(0, 2);
             parts.forEach(element => {
                 var pParts = element.split('-');
-                updatePlayerDeckingStatus(pParts[0], pParts[3] != null);
-                updatePlayerHealth(pParts[0], pParts[1]);
-                updatePlayerEnergy(pParts[0], pParts[2]);                
+                periodicUpdate(pParts[0], pParts[1], pParts[2], parts[3]);
             });
             break;
+        case msgType.CyberFrag:
+            cyberFragPlayer(parts[0]);
+            break;
     }
+}
+
+function periodicUpdate(id, health, energy, deckingStatus) {
+    updatePlayerDeckingStatus(id, deckingStatus != null);
+    updatePlayerHealth(id, health);
+    updatePlayerEnergy(id, energy);
+
+    var player = getPlayer(id);
+    if(player.cyberFragged != null) {
+        if(player.cyberFragged + CyberFragDisplayDuration < Date.now()) {
+            removeCbyerFragStatus(id);
+        }
+    }
+}
+
+function removeCbyerFragStatus(id) {
+    getPlayerChildNode(id, "player-class").classList.remove("cyber-frag");
+}
+
+function cyberFragPlayer(id) {
+    getPlayerChildNode(id, "player-class").classList.add("cyber-frag");
+    var player = getPlayer(id);
+    player.cyberFragged = Date.now();
 }
 
 function getPlayer(id) {
@@ -206,7 +233,7 @@ function disconnectPlayer(id) {
 function setClassPicture(id) {
     var player = getPlayer(id);
     var unknownClass = player.Class == Classes.Unknown || player.Class == null;
-    setPicture(id, unknownClass ? Classes.Unknown: player.Class, unknownClass ? "" : player.Team); 
+    setPicture(id, unknownClass ? Classes.Unknown : player.Class, unknownClass ? "" : player.Team); 
 }
 
 function setPicture(id, name, team) {
@@ -243,6 +270,7 @@ function playerSpawn(id, playerClass, usingScs = false) {
     updatePlayerArmor(id, classData.MaxArmour);
     //Do not update energy as it might be 0 from TK
 
+    removeCbyerFragStatus(id);
     getPlayerChildNode(id, "player-class").classList.remove("dead");
 }
 
@@ -360,6 +388,7 @@ function killPlayer(id) {
 
     updatePlayerHealth(id, 0);
     updatePlayerArmor(id, 0);
+    removeCbyerFragStatus(id);
     getPlayerChildNode(id, "player-class").classList.add("dead");
 }
 

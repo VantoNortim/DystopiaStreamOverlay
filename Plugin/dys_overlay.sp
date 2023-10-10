@@ -4,7 +4,7 @@
 #include <sdkhooks>
 #include <websocket>
 
-#define PLUGIN_VERSION "1.0.1"
+#define PLUGIN_VERSION "1.0.2"
 
 #define MAX_CLIENTS 32
 
@@ -44,6 +44,8 @@ public OnPluginStart()
 	HookEvent("player_spawn", Event_OnPlayerSpawn);
 	HookEvent("player_class", Event_OnPlayerClass);
 	HookEvent("player_hurt", Event_OnPlayerHurt);
+	HookEvent("cyber_frag", Event_CyberFrag);
+	HookEvent("emped_from_cyber", Event_CyberFrag);
 
 	RegAdminCmd("sm_stn", UpdateTeamNames, ADMFLAG_KICK, "Change overlay team names");
 
@@ -119,6 +121,14 @@ public void OnMapStart() {
 			}
 		}
 	}
+}
+
+public Event_CyberFrag(Handle:event, const String:name[], bool:dontBroadcast) {
+	new userid = GetEventInt(event, "userid");
+
+	decl String:sBuffer[5];
+	Format(sBuffer, sizeof(sBuffer), "O%d", userid);
+	SendToAllChildren(sBuffer);
 }
 
 public Action UpdateTeamNames(int client, int args) {
@@ -275,7 +285,8 @@ public Event_OnPlayerHurt(Handle:event, const String:name[], bool:dontBroadcast)
 	SendToAllChildren(sBuffer);
 }
 
-public Action Event_TimerTick(Handle timer) {
+public Action Event_TimerTick(Handle timer)
+{
 
 	if(!IsAnyClientConnectedToOverlay()) {
 		return Plugin_Continue;

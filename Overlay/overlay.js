@@ -142,7 +142,7 @@ function handleMessage(data) {
             parts.splice(0, 2);
             parts.forEach(element => {
                 var pParts = element.split('-');
-                periodicUpdate(pParts[0], pParts[1], pParts[2], parts[3]);
+                periodicUpdate(pParts[0], pParts[1], pParts[2], pParts[3]);
             });
             break;
         case msgType.CyberFrag:
